@@ -1,0 +1,21 @@
+{
+   "manifest_version": 2,
+   "default_locale": "en_US",
+   "name": "__MSG_chrome_extension_name__",
+   "description": "__MSG_chrome_extension_description__",
+   "background": {
+      "scripts": ["js/background.js"],
+      "persistence": false 
+   },
+   "browser_action": {
+      "default_icon": "images/icon/128x128.png",
+      "default_popup": "popup.html"
+   },
+   "icons": {
+      "128": "images/icon/128x128.png",
+      "48": "images/icon/48x48.png",
+      "16": "images/icon/16x16.png"
+   },
+   "permissions": [],
+   "version": "0.1"
+}

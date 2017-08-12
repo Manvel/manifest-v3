@@ -1,0 +1,10 @@
+{
+   "chrome_extension_name": {
+      "description": "Extension name",
+      "message": "Boilerplate"
+   },
+   "chrome_extension_description": {
+      "description": "Extension description",
+      "message": "Minimal template code for chrome extensions"
+   }
+}
