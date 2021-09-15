@@ -22,7 +22,7 @@
    ],
    "content_scripts": [
       {
-         "js": [],
+         "js": ["js/cs/script.js"],
          "all_frames": true,
          "matches": [ "*://*/*" ],
          "run_at": "document_start"
