@@ -16,7 +16,7 @@
       "48": "images/icon/48x48.png",
       "16": "images/icon/16x16.png"
    },
-   "permissions": [],
+   "permissions": ["webRequest"],
    "host_permissions": ["*://*/*", "<all_urls>"],
    "content_scripts": [
       {
