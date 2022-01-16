@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { 
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "user-agent",
+        "operation": "remove"
+      }]
+    },
+    "condition": {"excludedResourceTypes": ["main_frame"]}
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": { 
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "user-agent",
+        "operation": "remove"
+      }]
+    },
+    "condition": {"resourceTypes": ["main_frame"]}
+  }
+]

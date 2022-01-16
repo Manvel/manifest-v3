@@ -16,7 +16,14 @@
       "48": "images/icon/48x48.png",
       "16": "images/icon/16x16.png"
    },
-   "permissions": ["webRequest"],
+   "declarative_net_request" : {
+      "rule_resources" : [{
+        "id": "block-ua",
+        "enabled": true,
+        "path": "./rules/block-us.json"
+      }]
+    },
+   "permissions": ["webRequest", "declarativeNetRequest"],
    "host_permissions": ["*://*/*", "<all_urls>"],
    "content_scripts": [
       {
