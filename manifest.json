@@ -1,14 +1,13 @@
 {
    "author": "Manvel",
-   "manifest_version": 2,
+   "manifest_version": 3,
    "default_locale": "en_US",
    "name": "__MSG_chrome_extension_name__",
    "description": "__MSG_chrome_extension_description__",
    "background": {
-      "scripts": ["js/background.js"],
-      "persistent": false 
-   },
-   "browser_action": {
+      "service_worker": "js/background.js"
+    },
+   "action": {
       "default_icon": "images/icon/128x128.png",
       "default_popup": "popup.html"
    },
@@ -17,9 +16,15 @@
       "48": "images/icon/48x48.png",
       "16": "images/icon/16x16.png"
    },
-   "permissions": [
-      "*://*/*", "<all_urls>"
-   ],
+   "declarative_net_request" : {
+      "rule_resources" : [{
+        "id": "block-ua",
+        "enabled": true,
+        "path": "./rules/block-us.json"
+      }]
+    },
+   "permissions": ["webRequest", "declarativeNetRequest"],
+   "host_permissions": ["*://*/*", "<all_urls>"],
    "content_scripts": [
       {
          "js": ["js/cs/script.js"],
@@ -33,6 +38,5 @@
      "open_in_tab": true,
      "browser_style": false
    },
-   "content_security_policy": "script-src 'self' 'unsafe-eval' object-src 'self'",
    "version": "0.1"
 }
