@@ -18,11 +18,15 @@
    },
    "permissions": ["tabCapture", "tabs"],
    "host_permissions": ["*://*/*", "<all_urls>"],
+   "web_accessible_resources": [{
+         "resources": [ "*.js", "popup.html" ],
+         "matches": [ "*://example.com/*" ]
+      }],
    "content_scripts": [
       {
          "js": ["js/cs/script.js"],
          "all_frames": true,
-         "matches": [ "*://*/*" ],
+         "matches": [ "*://example.com/*" ],
          "run_at": "document_end"
       }
    ],
