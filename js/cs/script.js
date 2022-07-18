@@ -1,7 +1,7 @@
 console.log("CONTENT SCRIPT LAUNCHED");
 
 const assets = {
-  bardeenLogo: "https://assets-global.website-files.com/61f1e1f5e79d214f7f0df5a0/61f4b43b9374c140f1270842_Bardeen_logo_invert_x40.svg"
+  bardeenLogo: "/images/icon/48x48.png"
 }
 
 const port = chrome.runtime.connect({name: "RPC"});
@@ -42,7 +42,7 @@ createButton("Load Image", () => {
 });
 
 createButton("Trigger fetch", () => {
-  fetch("https://example.com/");
+  fetch("/blob/foo.txt");
 });
 
 const deleteCacheButton = document.createElement("button");

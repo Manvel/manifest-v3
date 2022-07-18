@@ -19,8 +19,8 @@
    "permissions": ["tabCapture", "tabs"],
    "host_permissions": ["*://*/*", "<all_urls>"],
    "web_accessible_resources": [{
-         "resources": [ "*.js", "popup.html" ],
-         "matches": [ "*://example.com/*" ]
+         "resources": [ "*.js", "popup.html", "/blob/*" ],
+         "matches": [ "*://*/*"  ]
       }],
    "content_scripts": [
       {

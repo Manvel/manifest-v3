@@ -3,7 +3,8 @@ const CACHE_NAME = "CACHE_TEST";
 
 async function cacheAdd(resource) {
   const cache = await caches.open(CACHE_NAME);
-  await cache.add(resource);
+  //const res = await fetch(new Request(resource));
+  await cache.add(res);
   const addedCache = await cache.match(resource);
   console.log("CACHED RESOURCE", addedCache);
 }
