@@ -16,14 +16,18 @@
       "48": "images/icon/48x48.png",
       "16": "images/icon/16x16.png"
    },
-   "permissions": [],
+   "permissions": ["tabCapture", "tabs"],
    "host_permissions": ["*://*/*", "<all_urls>"],
+   "web_accessible_resources": [{
+         "resources": [ "*.js", "popup.html" ],
+         "matches": [ "*://example.com/*" ]
+      }],
    "content_scripts": [
       {
          "js": ["js/cs/script.js"],
          "all_frames": true,
-         "matches": [ "*://*/*" ],
-         "run_at": "document_start"
+         "matches": [ "*://example.com/*" ],
+         "run_at": "document_end"
       }
    ],
    "options_ui": {
