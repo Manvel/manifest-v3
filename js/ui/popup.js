@@ -45,6 +45,11 @@ createButton("Trigger fetch", () => {
   fetch("https://assets-global.website-files.com/61f1e1f5e79d214f7f0df5a0/61f4b43b9374c140f1270842_Bardeen_logo_invert_x40.svg");
 });
 
+createButton("Fetch blob", async () => {
+  const ret = await askSW("get_blob", {});
+  console.log('ret=', ret);
+});
+
 const deleteCacheButton = document.createElement("button");
 const image = document.createElement("img");
 
@@ -61,3 +66,19 @@ port.onMessage.addListener(async (resp) => {
   }
 });
 
+function askSW(cmd, args) {
+  console.time("Blob fetch request");
+  return new Promise(async resolve => {
+    const id = Math.random();
+    const swr = navigator.serviceWorker;
+    swr.addEventListener('message', function onMessage(e) {
+      if (e.data.id === id) {
+        swr.removeEventListener('message', onMessage);
+        console.timeEnd("Blob fetch request");
+        console.log(`Transfer time ${Date.now() - e.data.now}ms`);
+        resolve(e.data.data);
+      }
+    });
+    (await swr.ready).active.postMessage({ id, cmd, args });
+  });
+}

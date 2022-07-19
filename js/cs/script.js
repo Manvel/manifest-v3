@@ -63,9 +63,38 @@ port.onMessage.addListener(async (resp) => {
 
 function loadPopupInIFrame() {
   const popup = document.createElement("iframe");
-  console.log("chrome.runtime.id", chrome.runtime.id);
-  popup.src = `chrome-extension://${chrome.runtime.id}/popup.html`;
+  popup.src = chrome.runtime.getURL("popup.html");
   document.querySelector("body").appendChild(popup);
 }
 
 createButton("Popup to page", loadPopupInIFrame);
+
+createButton("Chunked receive",async () => {
+  const url = await chunkedDataReceive(port, "test");
+  console.log('open=', url);
+});
+
+function chunkedDataReceive(port, id) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    console.time("RXTime");
+    const handler = (req) => {
+      if (req.stream === id) {
+        if (req.message === "stream_chunk") {
+          chunks.push(req.chunk);
+        } else if (req.message === "stream_end") {
+          const blob = new Blob(chunks, {type: req.type});
+          port.onMessage.removeListener(handler);
+          console.timeEnd("RXTime");
+          resolve(URL.createObjectURL(blob));
+        } else if (req.message === "stream_error") {
+          port.onMessage.removeListener(handler);
+          console.timeEnd("RXTime");
+          reject(req.error);
+        }
+      }
+    };
+    port.onMessage.addListener(handler);
+    port.postMessage({message: "stream_get", stream: id})
+  })
+}

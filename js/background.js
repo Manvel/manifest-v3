@@ -45,6 +45,10 @@ chrome.runtime.onConnect.addListener((port) => {
       await cacheReadAll();
       await fetch("https://example.com/");
       console.log("FETCHED");
+    } else if (req.message === "stream_get") {
+      const buf = new ArrayBuffer(1024 * 1024 * 100);
+      new Uint8Array(buf).fill(' '.charCodeAt(0));
+      chunkedDataTransmit(port, req.stream, buf, "text/plain");
     }
   });
 });
@@ -66,8 +70,21 @@ self.addEventListener('fetch', async (event) => {
     console.log("NO CACHE MATCH");
     return;
   }
-
 });
+
+self.onmessage = e => {
+  const { id, cmd, args } = e.data;
+  console.log('ingress=', e.data)
+  if (cmd === 'get_blob') {
+    console.time("Composing buffer");
+    const buf = new ArrayBuffer(1024 * 1024 * 100);
+    new Uint8Array(buf).fill(' '.charCodeAt(0));
+    // const blob = new Blob([buf], {type: "text/plain"})
+    console.timeEnd("Composing buffer");
+    e.source.postMessage({ id, now: Date.now(), data: buf}, [buf]);
+    console.log('buf is now=', buf)
+  }
+};
 
 function _base64ToArrayBuffer(base64) {
   var binary_string = self.atob(base64);
@@ -78,4 +95,34 @@ function _base64ToArrayBuffer(base64) {
       bytes[i] = binary_string.charCodeAt(i);
   }
   return bytes.buffer;
+}
+
+function chunkedDataTransmit(port, id, buffer, type) {
+  const buf = new Uint8Array(buffer);
+  const chunkSize = 1024 * 1024;
+  return new Promise((resolve, reject) => {
+    console.time("TxTime");
+    let currentOffset = 0;
+    const sendNext = () => {
+      if (currentOffset >= buf.length) {
+        finalize();
+      } else {
+        setTimeout(() =>{ 
+          sendChunk(currentOffset);
+          currentOffset += chunkSize;
+        }, 0)
+      }
+    };
+    const sendChunk = (ofs) => {
+      const slice = buf.slice(ofs, ofs + chunkSize);
+      port.postMessage({message: "stream_chunk", stream: id, chunk: slice})
+      sendNext();
+    };
+    const finalize = () => {
+      port.postMessage({message: "stream_end", stream: id, type})
+      console.timeEnd("TxTime");
+      resolve();
+    }
+    sendNext();
+  });
 }
