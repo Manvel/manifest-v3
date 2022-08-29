@@ -16,7 +16,7 @@
       "48": "images/icon/48x48.png",
       "16": "images/icon/16x16.png"
    },
-   "permissions": [],
+   "permissions": ["tabs"],
    "host_permissions": ["*://*/*", "<all_urls>"],
    "content_scripts": [
       {
@@ -26,6 +26,10 @@
          "run_at": "document_start"
       }
    ],
+   "web_accessible_resources": [{
+      "resources": [ "document.html" ],
+      "matches": [ "*://*/*" ]
+   }],
    "options_ui": {
      "page": "options.html",
      "open_in_tab": true,
